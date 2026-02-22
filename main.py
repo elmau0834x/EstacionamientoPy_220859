@@ -1,15 +1,11 @@
-from typing import Union
-
 from fastapi import FastAPI
+from routes.router_rol import rol
+from routes.router_usuario import usuario
 
-app = FastAPI()
+app = FastAPI(
+    title="API Segura de Administracion de un autolavado",
+    description="API creada por mi profesor y le copie el código"
+)
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(rol)
+app.include_router(usuario)
