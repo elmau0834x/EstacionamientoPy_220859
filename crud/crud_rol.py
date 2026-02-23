@@ -1,7 +1,6 @@
+from sqlalchemy.orm import Session
 import models.model_rol
 import schemas.schema_rol
-from sqlalchemy.orm import Session
-import models, schemas
 
 def get_rol(db: Session,skip: int = 0, limit: int = 100):
     return db.query(models.model_rol.Rol).offset(skip).limit(limit).all()

@@ -1,9 +1,8 @@
-import models.model_usuario
-import schemas.schema_usuario
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from passlib.exc import UnknownHashError
-import models, schemas
+import models.model_usuario
+import schemas.schema_usuario
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
@@ -37,15 +36,24 @@ def create_usuario(db:Session, usuario: schemas.schema_usuario.UsuarioCreate):
     db.refresh(db_usuario)
     return db_usuario
 
-def update_usuario(db:Session, id: int, usuario: schemas.schema_usuario.UsuarioUpdate):
-    
+def update_usuario(db: Session, id: int, usuario: schemas.schema_usuario.UsuarioUpdate):
     db_usuario = db.query(models.model_usuario.Usuario).filter(models.model_usuario.Usuario.Id == id).first()
+    
     if db_usuario:
         for var, value in vars(usuario).items():
-            setattr(db_usuario, var, value) if value else None
+            if value: # Si se envió un valor en la petición
+                # Verificamos si el campo que se está actualizando es la contraseña
+                if var == "contrasena":
+                    hashed_password = pwd_context.hash(str(value).strip())
+                    setattr(db_usuario, var, hashed_password)
+                else:
+                    # Si es cualquier otro campo (nombre, correo, etc.), lo guardamos normal
+                    setattr(db_usuario, var, value)
+        
         db.add(db_usuario)
         db.commit()
-    db.refresh(db_usuario)
+        db.refresh(db_usuario) # Nota: Moví esto dentro del 'if'
+        
     return db_usuario
 
 def delete_usuario(db: Session, id: int):

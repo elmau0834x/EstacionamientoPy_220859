@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-import crud.crud_rol, config.db, schemas.schema_rol, models.model_rol
+import crud.crud_rol
+import config.db
+import schemas.schema_rol
+import models.model_rol
 from typing import List
 
 rol = APIRouter()

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routes.router_rol import rol
-from routes.router_usuario import usuario
+from routes.routes_rol import rol
+from routes.routes_usuario import usuario
 
 app = FastAPI(
     title="API Segura de Administracion de un autolavado",
