@@ -5,6 +5,7 @@ import config.db
 import crud.crud_usuario
 import schemas.schema_usuario
 import models.model_usuario
+import auth
 from typing import List
 
 usuario = APIRouter()
@@ -19,7 +20,7 @@ def get_db():
         db.close()
         
 @usuario.get("/usuario/", response_model=List[schemas.schema_usuario.Usuario], tags=["Usuarios"])
-async def read_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def read_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Depends(auth.oauth2_scheme)):
     db_usuario= crud.crud_usuario.get_usuario(db=db, skip=skip, limit=limit)
     return db_usuario
 
@@ -46,7 +47,6 @@ async def delete_usuario(id: int, db: Session = Depends(get_db)):
 
 @usuario.post("/login/", tags=["Login"])
 def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    # Delegamos la validación al CRUD
     usuario = crud.crud_usuario.authenticate_user(db, form_data.username, form_data.password)
     
     if not usuario:
@@ -55,5 +55,7 @@ def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = 
             detail="Credenciales incorrectas"
         )
     
-    # TODO: Implementar seguridad y tokens
-    return {"access_token": usuario.Id, "token_type": "bearer"}
+    # Generamos el token real guardando el ID del usuario en el campo "sub" (subject)
+    token_real = auth.create_access_token(data={"sub": str(usuario.Id)})
+    
+    return {"access_token": token_real, "token_type": "bearer"}
