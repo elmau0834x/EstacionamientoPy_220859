@@ -1,9 +1,7 @@
 '''Esta clase permite generar el modelo para los servicios'''
-from sqlalchemy import Column, Integer, String, Boolean,Float,DateTime
-# pylint: disable=import-error
+from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime
 from config.db import Base
 
-# pylint: disable=too-few-public-methods
 class Servicios(Base):
     '''Clase para especificar tabla de servicios'''
     __tablename__ = "tbc_servicios"

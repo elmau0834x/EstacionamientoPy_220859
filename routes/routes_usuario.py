@@ -20,6 +20,21 @@ def get_db():
     finally:
         db.close()
         
+@usuario.post("/login/", tags=["Login"])
+def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    usuario = crud.crud_usuario.authenticate_user(db, form_data.username, form_data.password)
+    
+    if not usuario:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Credenciales incorrectas"
+        )
+    
+    # Generamos el token real guardando el ID del usuario en el campo "sub" (subject)
+    token_real = auth.create_access_token(data={"sub": str(usuario.Id)})
+    
+    return {"access_token": token_real, "token_type": "bearer"}
+
 @usuario.get("/usuario/", response_model=List[schemas.schema_usuario.Usuario], tags=["Usuarios"])
 async def read_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Depends(auth.oauth2_scheme)):
     db_usuario= crud.crud_usuario.get_usuario(db=db, skip=skip, limit=limit)
@@ -45,18 +60,3 @@ async def delete_usuario(id: int, db: Session = Depends(get_db), token: str = De
     if db_usuario is None:
         raise HTTPException(status_code=404, detail="El Usuario no existe, no se pudo eliminar")
     return db_usuario
-
-@usuario.post("/login/", tags=["Login"])
-def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    usuario = crud.crud_usuario.authenticate_user(db, form_data.username, form_data.password)
-    
-    if not usuario:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credenciales incorrectas"
-        )
-    
-    # Generamos el token real guardando el ID del usuario en el campo "sub" (subject)
-    token_real = auth.create_access_token(data={"sub": str(usuario.Id)})
-    
-    return {"access_token": token_real, "token_type": "bearer"}
