@@ -41,7 +41,7 @@ async def read_usuarios(skip: int = 0, limit: int = 100, db: Session = Depends(g
     return db_usuario
 
 @usuario.post("/usuario/", response_model=schemas.schema_usuario.Usuario, tags=["Usuarios"])
-def create_usuario(usuario: schemas.schema_usuario.UsuarioCreate, db: Session = Depends(get_db), token: str = Depends(auth.oauth2_scheme)):
+def create_usuario(usuario: schemas.schema_usuario.UsuarioCreate, db: Session = Depends(get_db)):
     db_usuario = crud.crud_usuario.get_usuario_by_nombre(db, nombre=usuario.nombre)
     if db_usuario:
         raise HTTPException(status_code=400, detail="Usuario existente intenta nuevamente")
