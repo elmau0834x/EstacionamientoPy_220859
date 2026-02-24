@@ -6,7 +6,7 @@ from config.db import Base
 # pylint: disable=too-few-public-methods
 class Vehiculo(Base):
     '''Clase para especificar tabla vehiculos'''
-    __tablemname__ = "tbb_vehiculos"
+    __tablename__ = "tbb_vehiculos"
     Id = Column(Integer, primary_key=True, index=True)
     usuario_Id = Column(Integer, ForeignKey("tbb_usuarios.Id"))
     placa = Column(String(15))
