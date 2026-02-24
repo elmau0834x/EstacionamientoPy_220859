@@ -5,6 +5,7 @@ import config.db
 import crud.crud_usuario
 import schemas.schema_usuario
 import models.model_usuario
+import auth
 from typing import List
 
 usuario = APIRouter()

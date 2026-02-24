@@ -1,9 +1,13 @@
 from datetime import datetime, timedelta
 from jose import jwt
 from fastapi.security import OAuth2PasswordBearer
+from dotenv import load_dotenv
+import os
 
-# Configuración de seguridad (Idealmente, SECRET_KEY debería ir en tu archivo .env)
-SECRET_KEY = "clave_super_secreta_de_mi_estacionamiento" 
+load_dotenv()  # Carga las variables de entorno desde el archivo .env
+
+# Configuración de seguridad
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 # El token durará 30 minutos
 
