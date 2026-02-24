@@ -13,7 +13,7 @@ class VehiculoBase(BaseModel):
     serie: str
     color: str
     tipo: str
-    anio: str
+    anio: int
     estado: bool
     fecha_registro: datetime
     fecha_actualizacion: datetime
