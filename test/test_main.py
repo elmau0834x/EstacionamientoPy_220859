@@ -1,16 +1,20 @@
 from fastapi.testclient import TestClient
 from main import app
+from dotenv import load_dotenv
+import os
+
+test_email = os.getenv("TEST_USER_EMAIL")
+test_password = os.getenv("TEST_USER_PASSWORD")
 
 # Creamos un "cliente falso" que simulará ser nuestro navegador o Swagger
 client = TestClient(app)
 
 # --- PRUEBA 1: Verificar que el Login funciona ---
 def test_login_exitoso():
-    # Simulamos llenar el formulario de Swagger con el usuario Mau
-    # NOTA: Cambia "tu_contraseña_real" por la contraseña que le pusiste a Mau
+
     response = client.post(
         "/login/",
-        data={"username": "Naruto@oasis.game", "password": "contrasena123"}
+        data={"username": test_email, "password": test_password}
     )
     
     # Comprobamos que el servidor responda con un 200 (Éxito)
@@ -35,7 +39,7 @@ def test_obtener_usuarios_con_token():
     # Paso A: Hacemos login para conseguir la "llave"
     login_response = client.post(
         "/login/",
-        data={"username": "Naruto@oasis.game", "password": "contrasena123"}
+        data={"username": os.getenv("TEST_USER_EMAIL"), "password": os.getenv("TEST_USER_PASSWORD")}
     )
     token = login_response.json()["access_token"]
     
