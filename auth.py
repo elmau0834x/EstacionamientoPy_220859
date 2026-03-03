@@ -9,7 +9,7 @@ load_dotenv()  # Carga las variables de entorno desde el archivo .env
 # Configuración de seguridad
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
 # Le indicamos a FastAPI cuál es la ruta exacta donde los usuarios inician sesión
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
