@@ -30,4 +30,4 @@ class Vehiculo(VehiculoBase):
     Id: int
     class Config:
         '''Utilizar el orm para ejecutar las funcionalidades'''
-        orm_mode =True
+        from_attributes = True

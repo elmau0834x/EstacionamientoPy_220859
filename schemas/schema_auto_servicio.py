@@ -1,6 +1,5 @@
-'''Docstring for schemas.schema_usuario_vehiculo_servicio'''
 from datetime import datetime, date, time
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class UsuarioVehiculoServicioBase(BaseModel):
     vehiculo_Id: int
@@ -10,6 +9,7 @@ class UsuarioVehiculoServicioBase(BaseModel):
     fecha: date
     hora: time
     estatus: str
+    descuento: float # <--- Nuevo campo
     estado: bool
     fecha_registro: datetime
     fecha_actualizacion: datetime
@@ -22,5 +22,4 @@ class UsuarioVehiculoServicioUpdate(UsuarioVehiculoServicioBase):
 
 class UsuarioVehiculoServicio(UsuarioVehiculoServicioBase):
     Id: int
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

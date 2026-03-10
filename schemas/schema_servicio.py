@@ -1,11 +1,11 @@
-'''Docstring for schemas.schema_servicio'''
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class ServicioBase(BaseModel):
     nombre: str
     descripcion: str
     costo: float
+    descuento: float  # <--- Nuevo campo
     duracion_minutos: int
     estado: bool
     fecha_registro: datetime
@@ -19,5 +19,4 @@ class ServicioUpdate(ServicioBase):
 
 class Servicio(ServicioBase):
     Id: int
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

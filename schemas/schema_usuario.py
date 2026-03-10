@@ -31,7 +31,7 @@ class Usuario(UsuarioBase):
     Id: int
     class Config:
         '''Utilizar el orm para ejecutar las funcionalidades'''
-        orm_mode =True
+        from_attributes = True
 
 class UsuarioLogin(BaseModel):
     '''Clase para realizar login por numero de telefono o correo'''
